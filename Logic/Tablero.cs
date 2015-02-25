@@ -26,8 +26,10 @@ namespace Backtracking_n_reinas.Logic
         public Tablero (int[] array){
             int tam = array.Length;
             int etapa = 0;
+            tablero = new string[tam][];
             for (int i = 0; i < tam; i++)
             {
+                tablero[i] = new string[tam];
                 for (int j = 0; j < tam; j++)
                 {
                     if (array[etapa] == j && etapa == i)
@@ -49,5 +51,19 @@ namespace Backtracking_n_reinas.Logic
         public void setTablero (string[][] tablero){
             this.tablero = tablero;
         }
+
+        public string toString() {
+            string resultado = "";
+            for (int i = 0; i < tablero.Length; i++)
+            {
+                for (int j = 0; j < tablero.Length; j++)
+                {
+                    resultado += tablero[i][j] + " ";
+                }
+                resultado += "\n";
+            }
+            return resultado;
+        }
+
     }
 }

@@ -28,26 +28,51 @@ namespace Backtracking_n_reinas.Logic
             tableros.Add(new Tablero(movimientoActual));
         }
 
-        public static void main(string[] arg) { 
-                
-        }
+        /*public static void main(string[] arg) {
+            Backtracking back = new Backtracking(4);
+            Tablero tab = new Tablero(4);
+
+        }*/
 
         /*
          * etapa indica que me estoy moviendo sobre que posición de array que representa el tablero
          * el tablero que recibe es sobre el cual intentará hacer la operacion
          */
-        public bool funcionReinas(int[] movimiento, int etapa){
-            if (etapa > reinas)
+        public bool funcionReinas(int[] movimiento, int etapa, ref List<Tablero> tab, ref int cr){
+            bool exito=false;
+            if (etapa+1 > reinas)
                 return false;
-            bool exito = false;
-            while(etapa<=reinas || exito ){
+            movimiento[etapa] = -1;
+            while( /*(((movimiento[etapa]<reinas-1)&&(!(movimiento[etapa]>reinas-1))) || (cr+1<reinas-1) ) &&*/ (!exito && !(movimiento[etapa]==reinas-1)) ){ //se realiza hasta que se exploran todas las soluciones posibles
                 movimiento[etapa] = movimiento[etapa] + 1;
+                tab.Add(new Tablero(movimiento)); // se almacena la etapa antes de pasar a otra
+                Console.Write("cr: " + cr + "\n");
+                Console.Write("entro nueva etapa " + etapa + " : " + movimiento[0] + movimiento[1] + movimiento[2] + movimiento[3] + movimiento[4] + movimiento[5] + movimiento[6] + movimiento[7]);      
                 if (validarMovimiento(movimiento, etapa)){
-                    if (etapa <= reinas)
-                        exito = funcionReinas(movimiento, etapa + 1);
+                    cr += 1;
+                    if (cr == reinas)
+                    {
+                        exito = true;
+                        Console.Write("encontrado!!! "+ exito.ToString());
+                        return true;
+                    }
+                    Console.Write(" valido\n");
+                    if (etapa != reinas)
+                    {
+                        Console.Write("-->\n");
+                        exito = funcionReinas(movimiento, etapa+1, ref tab, ref cr);
+                        if (exito == true)
+                            return true;
+                    }
                     else
                         exito = true;
                 }
+                Console.Write("\n");
+            }
+            if (!exito)
+            {
+                movimiento[etapa] = -1;
+                cr -= 1;
             }
             return exito;
         }
@@ -57,13 +82,25 @@ namespace Backtracking_n_reinas.Logic
          * 2- si la distancia 
          */
         public bool validarMovimiento(int[] tablero, int k ) {
-            for (int i = 0; i < k - 1; i++) {
-                if (tablero[i] == tablero[k] || Math.Abs(tablero[i] - tablero[k]) == Math.Abs(i - k))
+            for (int i = 0; i<k; i++) {
+                if (Math.Abs(tablero[i] - tablero[k]) == Math.Abs(i - k))
                 {
                     return false;
                 }
+                if (tablero[k] == tablero[i])
+                    return false;
             }
-            return true;   
-        }
+            for (int i = k; i>k; i--)
+            {
+                if (Math.Abs(tablero[i] - tablero[k]) == Math.Abs(i - k))
+                {
+                    return false;
+                }
+                if (tablero[k] == tablero[i])
+                    return false;
+            }
+                return true;   
     }
+}
+
 }
